@@ -10,7 +10,7 @@ set.seed(1234)
 
 #### Fig_Ext_data18_a.2 - VISIUM A1 Analysis###
 
-visium_rds <- readRDS('/Users/monicam/Desktop/XUYU/REVISION_SUBMISSION_PAPER/Data_Files/Visium_A1_brain_011124.rds')
+visium_rds <- readRDS('Visium_A1_brain_011124.rds')
 DimPlot(visium_rds, label = TRUE)
 
 #Example feauture list
@@ -22,7 +22,7 @@ plot3
 ##### Fig_Ext_data18_c_e_f - scRNA_Seq Analysis #######
 
 #Reading the processed RDS file
-Final_Integration_scRNASeq <- readRDS("/Users/monicam/RWorkspace/Seurat_analysis/Seurat_Results/Final_Integration_scRNASeq_MDM_100323.rds")
+Final_Integration_scRNASeq <- readRDS("Final_Integration_scRNASeq_MDM_100323.rds")
 
 #Extended_Fig_18_c
 DimPlot(Final_Integration_scRNASeq, label = TRUE)
@@ -75,6 +75,3 @@ FeaturePlot(Final_Integration_scRNASeq, features = c(
                                           "NPY","ABI3BP","PDZRN4" ),
             min.cutoff = "q9",
             order = TRUE,pt.size=0.01)
-
-
-
