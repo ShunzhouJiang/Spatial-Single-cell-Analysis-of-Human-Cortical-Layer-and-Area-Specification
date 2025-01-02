@@ -1,0 +1,45 @@
+---
+title: "CorticalArea"
+output: html_document
+date: "2023-12-25"
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(readxl)
+plot_data <- read.csv("H2sr_histogram.csv")
+meta_info <- read_excel("meta info.xlsx")
+```
+
+```{r}
+colnames(plot_data)[2] <- "New Experiment Name"
+plot_data$`New Experiment Name` <- factor(plot_data$`New Experiment Name`, levels = meta_info$`New Experiment Name`)
+plot_data$H2_annotation <- gsub("En-oSVZ-2", "EN-oSVZ-2", plot_data$H2_annotation, fixed = TRUE)
+plot_data$H2_annotation <- factor(plot_data$H2_annotation, levels = c("RG1", "oRG1", "Astro-late1", "tRG", "vRG-late", "EN-ET-SP-early", "EN-ET-SP-P", "EN-ET-L5/6", "EN-ET-L6-early", "EN-ET-SP", "IPC-oSVZ", "IPC-SVZ-1", "IPC-iSVZ", "IPC-SVZ-2", "IPC-VZ/SVZ", "EN-IZ-1", "EN-L2", "EN-IZ-2", "EN-oSVZ-1", "EN-oSVZ-2", "EN-IT-L6", "EN-IT-L4", "EN-IT-L4/5", "EN-IT-L3/4", "EN-IT-L2/3", "EC", "Astro-1", "OPC", "IN-SST", "IN-CGE", "INP-VZ/GE", "IN-VZ/GE", "IN-MGE"))
+```
+
+```{r}
+stacked_barplot <- ggplot(plot_data, aes(fill=H2_annotation, y=percent, x=`New Experiment Name`)) +
+  geom_bar(position="fill", stat="identity") +
+  scale_fill_manual(values=c('#92D050','#99D35B','#A0D666','#ADDB7C','#C8E6A7','#00B0F0','#10B5F1',
+                    '#D8ADFF','#40C3F4','#7FD6F7','#00B050','#10B55B','#20BA66','#40C37C','#7FD6A7'
+                    ,'#FFC000','#FFC820','#FFCF40','#FFD760','#FFDE7F','#209AD2','#FEAAA8',
+                    '#B870FF','#C8E61B','#FF0000','#CC99FF','#7030A0','#8C57B2','#305496',
+                    '#4A69A3','#647EB0','#7E93BD','#97A8CA')) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) +
+  xlab("Experiment") 
+print(stacked_barplot)
+```
+
+```{r}
+# Saving the plot
+ggsave("Sample Region Prop H2.pdf", stacked_barplot, width = 15, height = 7, units = "in")
+```
+
