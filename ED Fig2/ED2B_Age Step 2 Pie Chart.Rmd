@@ -1,0 +1,35 @@
+---
+title: "Inviduals"
+output: html_document
+date: "2024-01-15"
+---
+
+```{r}
+encluster_age <- read.csv("encluster_age.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+encluster_age$gw <- factor(encluster_age$gw, levels = c("15", "20", "22", "34"))
+```
+
+```{r}
+pie_chart <- ggplot(encluster_age, aes(x="", fill=gw, y=age_count)) + 
+  geom_bar(width = 1, stat="identity") +
+  scale_fill_manual(values=c("#B0F26D", "#5ebe5a", "#F066EA", "blueviolet")) +
+  coord_polar("y", start=0) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    plot.margin = unit(c(1, 1, 1, 5), "cm"),
+    plot.title.position = "plot",
+    plot.title = element_text(hjust = 0.4)
+    )
+
+print(pie_chart)
+```
+
+```{r}
+# Saving the plot
+ggsave("Age Pie Chart.pdf", pie_chart, width = 15, height = 3.8, units = "in")
+```
+
