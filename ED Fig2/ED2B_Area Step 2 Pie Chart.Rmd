@@ -1,0 +1,35 @@
+---
+title: "CorticalArea"
+output: html_document
+date: "2023-12-25"
+---
+
+```{r}
+merged_encluster_ca <- read.csv("encluster_ca.csv", stringsAsFactors = FALSE)
+```
+
+```{r}
+merged_encluster_ca$cortical_area <- factor(merged_encluster_ca$cortical_area, levels = c("PFC", "PMC/M1", "Par", "Temp", "Occi"))
+```
+
+```{r}
+pie_chart <- ggplot(merged_encluster_ca, aes(x="", fill=cortical_area, y=ca_count)) + 
+  geom_bar(width = 1, stat="identity") +
+  scale_fill_manual(values=c("red", "yellow", "cyan", "coral", "royalblue")) +
+  coord_polar("y", start=0) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    plot.margin = unit(c(1, 1, 1, 5), "cm"),
+    plot.title.position = "plot",
+    plot.title = element_text(hjust = 0.4)
+    )
+
+print(pie_chart)
+```
+
+```{r}
+# Saving the plot
+ggsave("Area Pie Chart.pdf", pie_chart, width = 15, height = 3.8, units = "in")
+```
+
