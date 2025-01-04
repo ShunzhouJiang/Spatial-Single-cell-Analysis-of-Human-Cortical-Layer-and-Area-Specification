@@ -1,0 +1,55 @@
+---
+title: "Layer H3"
+author: "Chunyu Luo"
+date: "2024-03-29"
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+```{r}
+library(ggplot2)
+```
+
+```{r}
+plot_data <- read.csv("H3_layer_histogram.csv")
+```
+
+```{r}
+plot_data$H3_annotation <- factor(plot_data$H3_annotation, levels = c("IN-VZ/LGE1", "IN-CGE5", "IN-GE2", "IN-VZ/LGE2", "INP-VZ", "INP-VZ/GE1", "IN-MGE3", "IN-CGE4", "IN-GE1", "IN-CGE2", "INP-LGE1", "INP-LGE2", "IN-CGE3", "IN-MGE2", "IN-MGE4", "IN-MGE1", "IN-SST4", "IN-SST2", "INP-VZ/GE2", "IN-CGE1", "IN-SST3", "IN-SST1", "IN-SST-NPY", "IN-MGE5", "IN-VIP-late"))
+```
+
+```{r}
+heatmap <- ggplot(plot_data, aes(fill=layer, y=percent, x=H3_annotation)) +
+  geom_bar(position="fill", stat="identity") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) +
+  xlab("H3 Cluster") 
+print(heatmap)
+```
+
+```{r}
+heatmap2 <- ggplot(plot_data, aes(fill=layer, y=percent, x=H3_annotation)) +
+  geom_bar(position="fill", stat="identity") +
+  scale_fill_manual(values=c("red", "yellow", "green", "cyan", "coral", "royalblue")) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) +
+  xlab("H3 Cluster") 
+print(heatmap2)
+```
+
+```{r}
+# Saving the plot
+ggsave("layer H3 prop.pdf", heatmap, width = 8, height = 6, units = "in")
+ggsave("layer H3 prop colorscheme2.pdf", heatmap2, width = 8, height = 6, units = "in")
+```
+
