@@ -370,7 +370,7 @@ scSHCmain <- function(data,batch=NULL,alpha=0.05,num_features=2500,
   return(list(cluster_labels,node0))
 }
 
-setwd("/home/shunzhou/scSHC")
+
 gw_lst <- c("gw15", "gw20", "gw22", "gw34")
 total_num <- 500000
 sig_level_lst <- c(0.0005)
@@ -378,6 +378,7 @@ sig_level_lst <- c(0.0005)
 for (sig_level in sig_level_lst) {
   for (gw in gw_lst) {
     adata_tot <- read_h5ad(paste0(gw, ".h5ad"))
+    adata_tot <- AnnData(adata_tot$raw$X, obs = adata_tot$obs, var = adata_tot$var, obsm = list(spatial = adata_tot$obsm$spatial))
     cluster_lst <- table(adata_tot$obs$H2_annotation)
     cluster_num <- as.numeric(round(cluster_lst/nrow(adata_tot)*total_num))
     names(cluster_num) <- names(cluster_lst)

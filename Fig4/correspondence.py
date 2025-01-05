@@ -116,7 +116,6 @@ def getData(gw_test_tot, sourcekey, targetkey, filter_prop):
     # color_link = []
     # color_dict = {}
     gw_lst = ["gw15", "gw20", "gw22", "gw34"]
-    # gw_lst = ["gw34", "gw22", "gw20", "gw15"]    
     source_dict = {}
     node_label = []
     
@@ -154,7 +153,7 @@ def getData(gw_test_tot, sourcekey, targetkey, filter_prop):
     # color = list(flatten([list(m.values()) for m in list(color_dict.values())]))
     return node_label, table2, table, source_dict
 
-def savedata(data, h1name, filename):
+def savedata(data, h1name, filename, path = "result"):
     src_name = np.array(data[0])[data[3]['source'].values]
     trg_name = np.array(data[0])[data[3]['target'].values]
     df = data[1].copy()
@@ -162,26 +161,19 @@ def savedata(data, h1name, filename):
     df['target'] = trg_name
     df = df.rename(columns={"value": "Number of cells"})
     df = df[['source', 'source_gw', 'target', 'target_gw', 'Number of cells']]
-    df.to_csv(f"/Users/shunzhou/Desktop/RA/Xuyu_Project/sankey/full/{h1name}/{filename}.csv")
+    os.makedirs(path, exist_ok=True)
+    df.to_csv(f"{path}/{h1name}/{filename}.csv")
 
 def main():
-    gw15 = read_h5ad("gw15.h5ad")
-    gw20 = read_h5ad("gw20.h5ad")
-    gw22 = read_h5ad("gw22.h5ad")
-    gw34 = read_h5ad("gw34.h5ad")
+    gw15 = read_h5ad("gw15.h5ad"); gw15 = gw15.raw.to_adata()
+    gw20 = read_h5ad("gw20.h5ad"); gw20 = gw20.raw.to_adata()
+    gw22 = read_h5ad("gw22.h5ad"); gw22 = gw22.raw.to_adata()
+    gw34 = read_h5ad("gw34.h5ad"); gw34 = gw34.raw.to_adata()
 
     gw15.obs['H3_annotation'] = gw15.obs['H3_annotation'].astype(str).where(gw15.obs['H3_annotation'].notna(), gw15.obs['H2_annotation'].astype(str) + '-c0')
     gw20.obs['H3_annotation'] = gw20.obs['H3_annotation'].astype(str).where(gw20.obs['H3_annotation'].notna(), gw20.obs['H2_annotation'].astype(str) + '-c0')
     gw22.obs['H3_annotation'] = gw22.obs['H3_annotation'].astype(str).where(gw22.obs['H3_annotation'].notna(), gw22.obs['H2_annotation'].astype(str) + '-c0')
     gw34.obs['H3_annotation'] = gw34.obs['H3_annotation'].astype(str).where(gw34.obs['H3_annotation'].notna(), gw34.obs['H2_annotation'].astype(str) + '-c0')
-
-    gw_lst = ["gw15", "gw20", "gw22", "gw34"]
-    for gw in gw_lst:
-        if "H3_annotation" in locals()[gw].obs.columns:
-            locals()[gw].obs = locals()[gw].obs.drop(columns="H3_annotation")
-        # locals()[gw].obs = locals()[gw].obs.join(shc_result_tot, how="left")
-        locals()[gw].obs["H3_annotation"] = locals()[gw].obs["H2_annotation"].astype(str) + " Cluster " + locals()[gw].obs["H3_cluster"].astype(str)
-        locals()[gw].obs["H3_annotation"] = "'" + locals()[gw].obs["H3_annotation"]
         
     gw_tot = [gw15, gw20, gw22, gw34]
     gw_result_tot_et, crosstab_test_tot_et, score_tot_et = get_result(gw_tot, cluster = "EN-ET")
