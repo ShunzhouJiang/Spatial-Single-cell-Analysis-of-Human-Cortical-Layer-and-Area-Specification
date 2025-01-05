@@ -6,8 +6,9 @@ library(MASS)
 library(reticulate)
 library(data.tree)
 library(splitstackshape)
+library(glue)
 
-use_python("~/miniconda3/envs/renv/bin/python")
+# use_python("~/miniconda3/envs/renv/bin/python")
 
 # Compute Poisson deviances
 poisson_dev_batch <- function(y,x) {
@@ -377,7 +378,8 @@ sig_level_lst <- c(0.0005)
 
 for (sig_level in sig_level_lst) {
   for (gw in gw_lst) {
-    adata_tot <- read_h5ad(paste0(gw, ".h5ad"))
+    # adata_tot <- read_h5ad(paste0(gw, ".h5ad"))
+    adata_tot <- read_h5ad(glue("../source_data/{gw}.h5ad"))
     adata_tot <- AnnData(adata_tot$raw$X, obs = adata_tot$obs, var = adata_tot$var, obsm = list(spatial = adata_tot$obsm$spatial))
     cluster_lst <- table(adata_tot$obs$H2_annotation)
     cluster_num <- as.numeric(round(cluster_lst/nrow(adata_tot)*total_num))

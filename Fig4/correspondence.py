@@ -1,22 +1,15 @@
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import scipy.stats as sp
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from matplotlib import gridspec
 import plotly.graph_objs as go
 import xgboost as xgb
 import pickle
 from sklearn.metrics import confusion_matrix, adjusted_rand_score
 from anndata import read_h5ad, concat, AnnData
-# import plotly.graph_objects as go
-# from itertools import cycle, islice
 import pyreadr
 from sklearn.model_selection import train_test_split
 from sklearn import metrics 
 from tqdm import tqdm
-from copy import deepcopy
 import scanpy as sc
 import os
 
@@ -91,7 +84,6 @@ def get_result(gw_tot, cluster):
     score_tot = []
     crosstab_tot = []
     for i in tqdm(range(len(gw_tot) - 1)):
-        # gw_test_tot, crosstab_test, score, crosstab = trainmodel(gw_tot[i+1], gw_tot[i], cluster=cluster, nround=100, thre=1500)
         gw_test_tot, crosstab_test, score, crosstab = trainmodel(gw_tot[i], gw_tot[i+1], cluster=cluster, nround=1000, thre=15000)
         gw_result_tot.append(gw_test_tot)
         crosstab_test_tot.append(crosstab_test)
@@ -165,10 +157,10 @@ def savedata(data, h1name, filename, path = "result"):
     df.to_csv(f"{path}/{h1name}/{filename}.csv")
 
 def main():
-    gw15 = read_h5ad("gw15.h5ad"); gw15 = gw15.raw.to_adata()
-    gw20 = read_h5ad("gw20.h5ad"); gw20 = gw20.raw.to_adata()
-    gw22 = read_h5ad("gw22.h5ad"); gw22 = gw22.raw.to_adata()
-    gw34 = read_h5ad("gw34.h5ad"); gw34 = gw34.raw.to_adata()
+    gw15 = read_h5ad("../source_data/gw15.h5ad"); gw15 = gw15.raw.to_adata()
+    gw20 = read_h5ad("../source_data/gw20.h5ad"); gw20 = gw20.raw.to_adata()
+    gw22 = read_h5ad("../source_data/gw22.h5ad"); gw22 = gw22.raw.to_adata()
+    gw34 = read_h5ad("../source_data/gw34.h5ad"); gw34 = gw34.raw.to_adata()
 
     gw15.obs['H3_annotation'] = gw15.obs['H3_annotation'].astype(str).where(gw15.obs['H3_annotation'].notna(), gw15.obs['H2_annotation'].astype(str) + '-c0')
     gw20.obs['H3_annotation'] = gw20.obs['H3_annotation'].astype(str).where(gw20.obs['H3_annotation'].notna(), gw20.obs['H2_annotation'].astype(str) + '-c0')
