@@ -22,7 +22,7 @@ plot3
 ##### Fig_Ext_data18_c_e_f - scRNA_Seq Analysis #######
 
 #Reading the processed RDS file
-Final_Integration_scRNASeq <- readRDS("Final_Integration_scRNASeq_MDM_100323.rds")
+Final_Integration_scRNASeq <- readRDS("Final_Integration_MDM_100323.rds")
 
 #Extended_Fig_18_c
 DimPlot(Final_Integration_scRNASeq, label = TRUE)
