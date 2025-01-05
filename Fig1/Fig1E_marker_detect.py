@@ -4,7 +4,8 @@ import scanpy as sc
 import os
 from anndata import read_h5ad
 
-adata = read_h5ad("merscope_integrated_855_raw.h5ad")
+adata = read_h5ad("merscope_integrated_855.h5ad")
+adata = adata.raw.to_adata()
 sc.pp.normalize_total(adata, target_sum=1e4)
 sc.pp.log1p(adata)
 sc.tl.rank_genes_groups(adata, 'H2_annotation', method='t-test')
