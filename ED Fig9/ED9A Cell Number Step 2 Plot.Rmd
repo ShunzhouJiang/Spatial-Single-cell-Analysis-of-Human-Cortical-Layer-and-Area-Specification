@@ -1,0 +1,51 @@
+---
+title: "CellNumber"
+output: html_document
+date: "2023-12-26"
+---
+```{r}
+library(ggplot2)
+```
+
+```{r}
+gw_H3c <- read.csv("gw_H3c.csv")
+gw_H3c$gw <- as.factor(gw_H3c$gw)
+filtered_gw_H3c <- subset(gw_H3c, H3_annotation %in% levels(factor(gw_H3c$H3_annotation, 
+    levels = c("EN-ET-SP-early1", "EN-ET-SP-early2", "EN-ET-SP-early3", "EN-ET-L6-early4", 
+               "EN-ET-SP-2", "EN-ET-SP-A", "EN-ET-L5-1", "EN-ET-L6-A", "EN-ET-SP-3", 
+               "EN-ET-SP-4", "EN-ET-L6-early3", "EN-ET-SP-P2", "EN-ET-SP-1", "EN-ET-SP-5", 
+               "EN-ET-L6-early5", "EN-ET-SP-P1", "EN-ET-L6-early2", "EN-ET-SP-early4", 
+               "EN-ET-SP-early5", "EN-ET-L6-early1", "EN-ET-L5/6", "EN-ET-L6-P", 
+               "EN-ET-SP-V1T1", "EN-ET-SP-V1T2", "EN-ET-L6-V1", "EN-IT-L3/4-1", 
+               "EN-IT-L2/3-A2", "EN-IT-L3-A", "EN-IT-L4/5-1", "EN-IT-L4/5-early", 
+               "EN-IT-L2/3-A1", "EN-IT-L6-2", "EN-IT-L4-A", "EN-IT-L5-1", 
+               "EN-IT-L5/6-P", "EN-IT-L4-late", "EN-IT-L6-1", "EN-IT-L4/5-late", 
+               "EN-IT-Hip", "EN-IT-L3-late", "EN-IT-L3/4-early", "EN-IT-L3/4-T", 
+               "EN-IT-L3/4-P2", "EN-IT-L4-1", "EN-IT-L3-V1", "EN-IT-L4-V1", 
+               "EN-IT-L3/4-P", "EN-IT-L6-late", "EN-IT-L3-P", "EN-IZ-2", 
+               "EN-IZ-3", "EN-oSVZ-1", "EN-IZ-1", "EN-L2-2", "En-oSVZ-2", 
+               "EN-L2-3", "EN-L2-1", "EN-L2-4"))))
+```
+
+```{r}
+filtered_gw_H3c$H3_annotation <- factor(filtered_gw_H3c$H3_annotation, levels = c("EN-ET-SP-early1", "EN-ET-SP-early2", "EN-ET-SP-early3", "EN-ET-L6-early4", "EN-ET-SP-2", "EN-ET-SP-A", "EN-ET-L5-1", "EN-ET-L6-A", "EN-ET-SP-3", "EN-ET-SP-4", "EN-ET-L6-early3", "EN-ET-SP-P2", "EN-ET-SP-1", "EN-ET-SP-5", "EN-ET-L6-early5", "EN-ET-SP-P1", "EN-ET-L6-early2", "EN-ET-SP-early4", "EN-ET-SP-early5", "EN-ET-L6-early1", "EN-ET-L5/6", "EN-ET-L6-P", "EN-ET-SP-V1T1", "EN-ET-SP-V1T2", "EN-ET-L6-V1", "EN-IT-L3/4-1", "EN-IT-L2/3-A2", "EN-IT-L3-A", "EN-IT-L4/5-1", "EN-IT-L4/5-early", "EN-IT-L2/3-A1", "EN-IT-L6-2", "EN-IT-L4-A", "EN-IT-L5-1", "EN-IT-L5/6-P", "EN-IT-L4-late", "EN-IT-L6-1", "EN-IT-L4/5-late", "EN-IT-Hip", "EN-IT-L3-late", "EN-IT-L3/4-early", "EN-IT-L3/4-T", "EN-IT-L3/4-P2", "EN-IT-L4-1", "EN-IT-L3-V1", "EN-IT-L4-V1", "EN-IT-L3/4-P", "EN-IT-L6-late", "EN-IT-L3-P", "EN-IZ-2", "EN-IZ-3", "EN-oSVZ-1", "EN-IZ-1", "EN-L2-2", "En-oSVZ-2", "EN-L2-3", "EN-L2-1", "EN-L2-4"))
+```
+
+```{r}
+stacked_barplot <- ggplot(gw_H3c1, aes(fill=gw, y=H3count, x=H3_annotation)) + 
+  geom_bar(position="stack", stat="identity") +
+  scale_fill_manual(values=c("#B0F26D", "#5ebe5a", "#F066EA", "blueviolet")) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) 
+print(stacked_barplot)
+```
+
+```{r}
+# Saving the plot
+ggsave("Cell Number.pdf", stacked_barplot, width = 15, height = 3.8, units = "in")
+```
