@@ -1,0 +1,86 @@
+---
+title: "XuyuMerscopeAllClusters"
+output: html_document
+date: "2023-10-30"
+---
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(RColorBrewer)
+gw15block <- read.csv("gw15_block_all.csv")
+## n counts column doesn't matter
+```
+
+```{r}
+# Compute the total ENs for each H3 cluster and experiment
+# For each h3 cluster, normalize the RS pair in that cluster
+gw15_r_H1c <- gw15block %>%
+  group_by(sample, region, H1_annotation) %>%
+  summarise(H1count = n(), .groups = "drop")
+write.csv(gw15_r_H1c, "gw15_region_H1cluster.csv", row.names = FALSE)
+
+gw15_r_H3c <- gw15block %>%
+  group_by(sample, region, H1_annotation, H3_annotation) %>%
+  summarise(H3count = n(), .groups = "drop")
+write.csv(gw15_r_H3c, "gw15_region_H3cluster.csv", row.names = FALSE)
+
+# Merging r_H1c and r_H3c data frames
+gw15_normH1 <- merge(gw15_r_H1c, gw15_r_H3c, by = c("sample", "region", "H1_annotation"))
+
+# Normalize to H1
+gw15_normH1$`normH1` <- gw15_normH1$H3count / gw15_normH1$H1count
+gw15_normH1$`normH1(%)` <- gw15_normH1$H3count * 100 / gw15_normH1$H1count
+
+gw15_H3c <- gw15_normH1 %>%
+  group_by(H3_annotation) %>%
+  summarise(max_normH1_val = max(`normH1(%)`), .groups = "drop")
+write.csv(gw15_H3c, "gw15_max_normH1val_per_H3.csv", row.names = FALSE)
+
+# Merging r and normH1 data frames
+gw15_norm <- merge(gw15_H3c, gw15_normH1, by = "H3_annotation")
+
+# Normalize to columns
+gw15_norm$`norm` <- gw15_norm$`normH1(%)` * 10 / gw15_norm$max_normH1_val
+gw15_norm$sample_region <- paste(gw15_norm$sample, gw15_norm$region, sep = "-")
+
+write.csv(gw15_norm, "gw15_normalized.csv", row.names = FALSE)
+```
+
+```{r}
+# Set the order of the 'region' variable
+gw15_norm$sample_region <- factor(gw15_norm$sample_region, levels = c("UMB1117-O1", "UMB1367-O1", "UMB1117-T1", "UMB1367-P1", "UMB1117-P1", "UMB1117-F2b", "UMB1117-F2a", "UMB1117-F1b", "UMB1117-F1a"))
+
+# gw15_norm$H3_annotation <- factor(gw15_norm$H3_annotation, levels = c("EN-ET-L6-early1", "EN-ET-L6-early3", "EN-ET-L6-P", "EN-ET-SP-1", "EN-ET-SP-early4", "EN-ET-L5/6", "EN-ET-L6-early2", "EN-ET-SP-P1", "EN-ET-SP-V1T2", "EN-ET-SP-early3",    "EN-ET-L6-early5", "EN-ET-SP-4", "EN-ET-SP-5", "EN-ET-SP-P2", "EN-ET-SP-V1T1", "EN-ET-L6-V1", "EN-ET-SP-early2", "EN-ET-SP-early5", "EN-ET-L5-1", "EN-ET-L6-A",
+# "EN-ET-L6-early4", "EN-ET-SP-2", "EN-ET-SP-3", "EN-ET-SP-A", "EN-ET-SP-early1", 
+# "EN-IT-L3/4-P2", "EN-IT-L3/4-early", "EN-IT-L3/4-1", "EN-IT-L3/4-P", "EN-IT-L4-late", 
+# "EN-IT-L4-V1", "EN-IT-L3-P", "EN-IT-Hip", "EN-IT-L2/3-A1", "EN-IT-L3-late", "EN-IT-L4-1", "EN-IT-L3/4-T", "EN-IT-L4-A", "EN-IT-L4/5-1", "EN-IT-L4/5-late",  "EN-IT-L5-1", "EN-IT-L5/6-P", "EN-IT-L6-1", "EN-IT-L4/5-early", "EN-IT-L2/3-A2", "EN-IT-L3-A", "EN-IT-L3-V1", "EN-IT-L6-2", "EN-IT-L6-late", "EN-IZ-3", "EN-oSVZ-1", "EN-IZ-2", "EN-L2-3", "EN-IZ-1", "En-oSVZ-2", "EN-L2-1", "EN-L2-2", "EN-L2-4"))
+
+gw15_norm$H3_annotation <- factor(gw15_norm$H3_annotation, levels = c("EN-ET-SP-early1", "EN-ET-SP-early2", "EN-ET-SP-early3", "EN-ET-L6-early4", "EN-ET-SP-2", "EN-ET-SP-A", "EN-ET-L5-1", "EN-ET-L6-A", "EN-ET-SP-3", "EN-ET-SP-4", "EN-ET-L6-early3", "EN-ET-SP-P2", "EN-ET-SP-1", "EN-ET-SP-5", "EN-ET-L6-early5", "EN-ET-SP-P1", "EN-ET-L6-early2", "EN-ET-SP-early4", "EN-ET-SP-early5", "EN-ET-L6-early1", "EN-ET-L5/6", "EN-ET-L6-P", "EN-ET-SP-V1T1", "EN-ET-SP-V1T2", "EN-ET-L6-V1", "EN-IT-L3/4-1", "EN-IT-L2/3-A2", "EN-IT-L3-A", "EN-IT-L4/5-1", "EN-IT-L4/5-early", "EN-IT-L2/3-A1", "EN-IT-L4-1", "EN-IT-L6-2", "EN-IT-L4-A", "EN-IT-L5-1", "EN-IT-L5/6-P", "EN-IT-L4-late", "EN-IT-L6-1", "EN-IT-L4/5-late", "EN-IT-Hip", "EN-IT-L3-late", "EN-IT-L3/4-early", "EN-IT-L3/4-T", "EN-IT-L3/4-P2", "EN-IT-L3-V1", "EN-IT-L4-V1", "EN-IT-L3/4-P", "EN-IT-L6-late", "EN-IT-L3-P", "EN-IZ-2", "EN-IZ-3", "EN-oSVZ-1", "EN-IZ-1", "EN-L2-2", "En-oSVZ-2", "EN-L2-3", "EN-L2-1", "EN-L2-4"))
+
+# Fill missing combinations with 0 in the norm column
+gw15_norm_complete <- gw15_norm %>%
+  complete(sample_region, H3_annotation, fill = list(norm = 0)) 
+
+# Creating the heatmap
+heatmap <- ggplot(gw15_norm_complete, aes(x = H3_annotation, y = sample_region, fill = norm)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = brewer.pal(9, "RdPu")) +
+  labs(title = "GW15 Cell fraction distribution of H3 clusters",
+       x = "H3 clusters",
+       fill = "Fraction of cells (normalized)") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) 
+
+print(heatmap)
+```
+
+```{r}
+# Saving the plot
+ggsave("H3ClustersGW15.pdf", heatmap, width = 15, height = 3.8, units = "in")
+```
+

@@ -1,0 +1,88 @@
+---
+title: "XuyuMerscopeAllClusters"
+output: html_document
+date: "2023-10-30"
+---
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(RColorBrewer)
+gw34block <- read.csv("gw34_block_all.csv")
+## n counts column doesn't matter
+```
+
+```{r}
+# Compute the total ENs for each H3 cluster and experiment
+# For each h3 cluster, normalize the RS pair in that cluster
+gw34_r_H1c <- gw34block %>%
+  group_by(sample, region, H1_annotation) %>%
+  summarise(H1count = n(), .groups = "drop")
+write.csv(gw34_r_H1c, "gw34_region_H1cluster.csv", row.names = FALSE)
+
+gw34_r_H3c <- gw34block %>%
+  group_by(sample, region, H1_annotation, H3_annotation) %>%
+  summarise(H3count = n(), .groups = "drop")
+write.csv(gw34_r_H3c, "gw34_region_H3cluster.csv", row.names = FALSE)
+
+# Merging r_H1c and r_H3c data frames
+gw34_normH1 <- merge(gw34_r_H1c, gw34_r_H3c, by = c("sample", "region", "H1_annotation"))
+
+# Normalize to H1
+gw34_normH1$`normH1` <- gw34_normH1$H3count / gw34_normH1$H1count
+gw34_normH1$`normH1(%)` <- gw34_normH1$H3count * 100 / gw34_normH1$H1count
+
+gw34_H3c <- gw34_normH1 %>%
+  group_by(H3_annotation) %>%
+  summarise(max_normH1_val = max(`normH1(%)`), .groups = "drop")
+write.csv(gw34_H3c, "gw34_max_normH1val_per_H3.csv", row.names = FALSE)
+
+# Merging r and normH1 data frames
+gw34_norm <- merge(gw34_H3c, gw34_normH1, by = "H3_annotation")
+
+# Normalize to columns
+gw34_norm$`norm` <- gw34_norm$`normH1(%)` * 10 / gw34_norm$max_normH1_val
+gw34_norm$sample_region <- paste(gw34_norm$sample, gw34_norm$region, sep = "-")
+
+write.csv(gw34_norm, "gw34_normalized.csv", row.names = FALSE)
+```
+
+
+```{r}
+# Set the order of the 'region' variable
+gw34_norm$sample_region <- factor(gw34_norm$sample_region, levels = c("UMB5900-BA18", "UMB5900-BA22", "UMB5900-BA40b", "UMB5900-BA40a", "UMB5900-BA123", "UMB5900-BA4", "UMB5900-BA9"))
+
+# gw34_norm$H3_annotation <- factor(gw34_norm$H3_annotation, levels = c("EN-ET-L6-V1", "EN-ET-SP-1", "EN-ET-SP-2", "EN-ET-SP-5", "EN-ET-SP-A", "EN-ET-SP-4", "EN-ET-SP-P2",  
+# "EN-ET-L5/6", "EN-ET-L6-A", "EN-ET-L6-early4", "EN-ET-SP-early3", "EN-ET-SP-early5", 
+# "EN-ET-L5-1", "EN-ET-L6-early5", "EN-ET-L6-early1", "EN-ET-L6-early3", "EN-ET-SP-early2", "EN-ET-L6-early2", "EN-ET-L6-P", "EN-ET-SP-P1", "EN-ET-SP-V1T1", "EN-ET-SP-3", "EN-ET-SP-early1", "EN-ET-SP-early4", "EN-ET-SP-V1T2", "EN-IT-L2/3-A1", 
+# "EN-IT-L2/3-A2", "EN-IT-L3-V1", "EN-IT-L4-V1", "EN-IT-L4/5-1", "EN-IT-L5-1", "EN-IT-Hip", "EN-IT-L3-late", "EN-IT-L3/4-1", "EN-IT-L4-A", "EN-IT-L5/6-P", "EN-IT-L6-2", "EN-IT-L3/4-T", "EN-IT-L4-1", "EN-IT-L4/5-early", "EN-IT-L6-1", "EN-IT-L4-late", "EN-IT-L6-late", "EN-IT-L3-A", "EN-IT-L3-P", "EN-IT-L3/4-early", "EN-IT-L3/4-P", "EN-IT-L3/4-P2", "EN-IT-L4/5-late", "EN-IZ-1", "EN-IZ-2", "EN-L2-1", 
+# "EN-L2-2", "EN-L2-4", "En-oSVZ-2", "EN-IZ-3", "EN-oSVZ-1", "EN-L2-3"))
+
+gw34_norm$H3_annotation <- factor(gw34_norm$H3_annotation, levels = c("EN-ET-SP-early1", "EN-ET-SP-early2", "EN-ET-SP-early3", "EN-ET-L6-early4", "EN-ET-SP-2", "EN-ET-SP-A", "EN-ET-L5-1", "EN-ET-L6-A", "EN-ET-SP-3", "EN-ET-SP-4", "EN-ET-L6-early3", "EN-ET-SP-P2", "EN-ET-SP-1", "EN-ET-SP-5", "EN-ET-L6-early5", "EN-ET-SP-P1", "EN-ET-L6-early2", "EN-ET-SP-early4", "EN-ET-SP-early5", "EN-ET-L6-early1", "EN-ET-L5/6", "EN-ET-L6-P", "EN-ET-SP-V1T1", "EN-ET-SP-V1T2", "EN-ET-L6-V1", "EN-IT-L3/4-1", "EN-IT-L2/3-A2", "EN-IT-L3-A", "EN-IT-L4/5-1", "EN-IT-L4/5-early", "EN-IT-L2/3-A1", "EN-IT-L4-1", "EN-IT-L6-2", "EN-IT-L4-A", "EN-IT-L5-1", "EN-IT-L5/6-P", "EN-IT-L4-late", "EN-IT-L6-1", "EN-IT-L4/5-late", "EN-IT-Hip", "EN-IT-L3-late", "EN-IT-L3/4-early", "EN-IT-L3/4-T", "EN-IT-L3/4-P2", "EN-IT-L3-V1", "EN-IT-L4-V1", "EN-IT-L3/4-P", "EN-IT-L6-late", "EN-IT-L3-P", "EN-IZ-2", "EN-IZ-3", "EN-oSVZ-1", "EN-IZ-1", "EN-L2-2", "En-oSVZ-2", "EN-L2-3", "EN-L2-1", "EN-L2-4"))
+
+# Fill missing combinations with 0 in the norm column
+gw34_norm_complete <- gw34_norm %>%
+  complete(sample_region, H3_annotation, fill = list(norm = 0)) 
+
+# Creating the heatmap
+heatmap <- ggplot(gw34_norm_complete, aes(x = H3_annotation, y = sample_region, fill = norm)) +
+  geom_tile() +
+  scale_fill_gradientn(colors = brewer.pal(9, "RdPu")) +
+  labs(title = "GW34 Cell fraction distribution of H3 clusters",
+       x = "H3 clusters",
+       fill = "Fraction of cells (normalized)") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) 
+
+print(heatmap)
+```
+
+```{r}
+# Saving the plot
+ggsave("H3ClustersGW34.pdf", heatmap, width = 15, height = 3.5, units = "in")
+```
+
