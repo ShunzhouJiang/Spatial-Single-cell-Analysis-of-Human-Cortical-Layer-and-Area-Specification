@@ -1,3 +1,5 @@
+# SMARTseq data are downloaded from Nowakowski, T. J. et al. doi:10.1126/science.aap8809 (2017).
+
 library(reticulate)
 # use_python("/usr/local/bin/python3.10")
 library(Seurat)
@@ -10,7 +12,7 @@ library(scRNAseq)
 library(splitstackshape)
 library(SingleR)
 
-# SMARTseq data are downloaded from Nowakowski, T. J. et al. doi:10.1126/science.aap8809 (2017).
+
 sc_expression <- read.table(file = 'SMARTseq_exprMatrix.tsv', sep = '\t', header = TRUE)
 rownames(sc_expression) <- sc_expression$gene
 sc_expression <- sc_expression[, 2:ncol(sc_expression)]
@@ -32,7 +34,8 @@ ref_data <- SingleCellExperiment(assays = list(counts = as.matrix(sc_expression)
 ref_data <- logNormCounts(ref_data)
 
 
-adata_tot <- read_h5ad("merscope_integrated_855_raw.h5ad")
+adata_tot <- read_h5ad("merscope_integrated_855.h5ad")
+adata_tot <- AnnData(adata_tot$raw$X, obs = adata_tot$obs, var = adata_tot$var, obsm = list(spatial = adata_tot$obsm$spatial))
 set.seed(1234)
 ind_sample <- stratified(adata_tot$obs, group = "H3_annotation", size = 0.1, keep.rownames = T)
 gw_rn <- ind_sample$rn
