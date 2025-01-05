@@ -1,7 +1,8 @@
+# Results based on "fig4E_EDfig11c_gene_updown.ipynb"
+
 library(dplyr)
 library(ggplot2)
 
-setwd("~/Desktop/RA/Xuyu_Project/fig5_gene_expression")
 # Define gene and cluster lists
 gene_lst <- c('GLRA2', 'TSHZ3', 'FAM107A', 'VAT1L', 'GABRA5', 'ATP2B4', 'NEFM', 'KLHL1', 'MLIP', 
               'NPR3', 'CYP26A1', 'FOXP1', 'SEMA3E', 'CUX2')
@@ -9,7 +10,7 @@ cluster_lst <- c("EN-ET-SP|L6b", "EN-ET-L5|6", "EN-IT-L5|6", "EN-IT-L4", "EN-IT-
 
 zs_dict <- list()
 
-# Read and process data, results based on "fig4E_EDfig11c_gene_updown.ipynb"
+
 for (cluster in cluster_lst) {
   zs <- read.csv(paste0("result/", cluster, "_zs.csv"), row.names = 1)
   zs <- zs[, colnames(zs) %in% gene_lst]
