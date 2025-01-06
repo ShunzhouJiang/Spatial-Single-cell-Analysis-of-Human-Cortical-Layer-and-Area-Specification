@@ -1,3 +1,5 @@
+# Raw SMARTseq reference data are downloaded from Nowakowski, T. J. et al. doi:10.1126/science.aap8809 (2017).
+
 library(reticulate)
 # use_python("/usr/local/bin/python3.10")
 library(Seurat)
@@ -10,7 +12,6 @@ library(scRNAseq)
 library(splitstackshape)
 library(SingleR)
 
-# SMARTseq data are downloaded from Nowakowski, T. J. et al. doi:10.1126/science.aap8809 (2017).
 sc_expression <- read.table(file = 'SMARTseq_exprMatrix.tsv', sep = '\t', header = TRUE)
 rownames(sc_expression) <- sc_expression$gene
 sc_expression <- sc_expression[, 2:ncol(sc_expression)]
