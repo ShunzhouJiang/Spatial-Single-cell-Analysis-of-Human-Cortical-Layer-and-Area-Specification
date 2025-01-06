@@ -16,7 +16,7 @@ from scENVI import ENVI
 
 adata_sc = read_h5ad("sc.h5ad")
 adata_sc.X = adata_sc.X.A
-adata_tot = read_h5ad("gw20.h5ad")
+adata_tot = read_h5ad("../source_data/gw20.h5ad")
 adata_tot.obs['source'] = adata_tot.obs['sample'].astype(str) + '-' + adata_tot.obs['region'].astype(str)
 adata_tot = adata_tot[adata_tot.obs['source'].isin(["FB080-O1c", "FB121-F1"]) ]
 adata_tot.obsm['spatial'] = np.array(adata_tot.obs[['center_x', 'center_y']])
