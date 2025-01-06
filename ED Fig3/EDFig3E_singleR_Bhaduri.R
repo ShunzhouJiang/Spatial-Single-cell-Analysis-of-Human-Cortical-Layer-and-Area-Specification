@@ -1,4 +1,4 @@
-## Raw data are downloaded from Bhaduri, A. et al. doi:10.1038/s41586-021-03910-8 (2021).
+## Raw scRNA-seq reference data are downloaded from Bhaduri, A. et al. doi:10.1038/s41586-021-03910-8 (2021).
 
 library(reticulate)
 # use_python("/usr/local/bin/python3.10")
