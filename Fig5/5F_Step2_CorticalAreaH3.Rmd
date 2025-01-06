@@ -1,0 +1,40 @@
+cc---
+title: "CorticalArea"
+output: html_document
+date: "2023-12-25"
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+
+count_ca_H3 <- read.csv("H3ca_histogram.csv")
+count_ca_H3 <- count_ca_H3[,-1]
+```
+
+```{r}
+count_ca_H3$H3_annotation = factor(count_ca_H3$H3_annotation, levels = c('EN-IT-L3-c0', 'EN-IT-L3-c3', 'EN-IT-L3/4-c3', 'EN-IT-L3/4-c0', 'EN-ET-L5/6-c4', 'EN-ET-L5/6-c3', 'EN-ET-SP-2-c1', 'EN-ET-SP-2-c3'))
+count_ca_H3$Cortical.area = factor(count_ca_H3$Cortical.area, levels = c("PFC", "PMC/M1", "Par", "Temp", "Occi"))
+```
+
+
+```{r}
+stacked_barplot <- ggplot(count_ca_H3, aes(fill=Cortical.area, y=percent, x=H3_annotation)) + 
+  geom_bar(position="fill", stat="identity") +
+  scale_fill_manual(values=c("red", "yellow", "cyan", "coral", "royalblue")) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) 
+print(stacked_barplot)
+```
+
+```{r}
+# Saving the plot
+ggsave("Cortical Area Prop.pdf", stacked_barplot, width = 5.4, height = 3.8, units = "in")
+```
+
