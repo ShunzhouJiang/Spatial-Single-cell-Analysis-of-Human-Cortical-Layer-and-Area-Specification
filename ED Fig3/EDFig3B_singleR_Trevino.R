@@ -22,7 +22,7 @@ ref_data <- SingleCellExperiment(assays = list(counts = t(adata_sc$X)), rowData 
                                 colData = DataFrame(Type=adata_sc$obs$cell_type, row.names = rownames(adata_sc$obs)))  
 ref_data <- logNormCounts(ref_data)
 
-adata_tot <- read_h5ad("merscope_integrated_855.h5ad")
+adata_tot <- read_h5ad("../source_data/merscope_integrated_855.h5ad")
 adata_tot <- AnnData(adata_tot$raw$X, obs = adata_tot$obs, var = adata_tot$var, obsm = list(spatial = adata_tot$obsm$spatial))
 set.seed(1234)
 ind_sample <- stratified(adata_tot$obs, group = "H2_annotation", size = 0.01, keep.rownames = T)
