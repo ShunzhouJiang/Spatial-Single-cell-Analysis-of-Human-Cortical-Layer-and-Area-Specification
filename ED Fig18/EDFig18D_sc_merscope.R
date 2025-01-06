@@ -19,7 +19,7 @@ ref_data <- SingleCellExperiment(assays = list(counts = GetAssayData(sc_sub)), r
 ref_data <- logNormCounts(ref_data)
 
 
-adata_tot <- read_h5ad("gw20.h5ad")
+adata_tot <- read_h5ad("../source_data/gw20.h5ad")
 adata_tot <- adata_tot[adata_tot$obs$H1_annotation %in% c("EN-ET", "EN-IT", "EN-Mig")]
 adata_tot$obs$source <- paste(adata_tot$obs$sample, adata_tot$obs$region, sep = "-")
 adata_tot <- adata_tot[adata_tot$obs$source %in% c("FB080-O1c", "FB121-F1") ]
