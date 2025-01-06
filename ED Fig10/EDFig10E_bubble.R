@@ -14,8 +14,8 @@ library(cowplot)
 library(glue)
 # library(Rfast)
 
-use_python("/usr/local/bin/python3.10")
-setwd("~/Desktop/RA/Xuyu_Project/fig4_bubble")
+# use_python("/usr/local/bin/python3.10")
+
 align_legend <- function(p, hjust = 0.5) {
   # extract legend
   g <- cowplot::plot_to_gtable(p)
