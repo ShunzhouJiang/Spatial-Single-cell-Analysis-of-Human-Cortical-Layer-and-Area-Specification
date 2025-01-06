@@ -1,7 +1,7 @@
 ## Raw human adult data are downloaded from Hodge, R. D. et al.  doi:10.1038/s41586-019-1506-7 (2019).
 
 library(reticulate)
-use_python("/usr/local/bin/python3.10")
+# use_python("/usr/local/bin/python3.10")
 library(Seurat)
 # library(edgeR)
 library(anndata)
