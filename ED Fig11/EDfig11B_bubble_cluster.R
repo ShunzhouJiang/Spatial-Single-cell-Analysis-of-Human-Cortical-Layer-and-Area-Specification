@@ -68,14 +68,8 @@ for (i in 1:length(group_lst)) {
   zs_bottom <- gene_zs[, gene_decre]
   nz_bottom <- gene_nz[, gene_decre]
   
-  # order_top <- order(as.vector(unlist(nz_top[1,])), decreasing = TRUE)
-  # order_bottom <- order(as.vector(unlist(nz_bottom[4,])), decreasing = FALSE)
-  # zs_top <- zs_top[, order_top]
-  # zs_bottom <- zs_bottom[, order_bottom]
   zs_select <- cbind(zs_top, zs_bottom)
   
-  # nz_top <- nz_top[, order_top]
-  # nz_bottom <- nz_bottom[, order_bottom]
   count_select <- cbind(nz_top, nz_bottom)
   count_select <- count_select * 100
   

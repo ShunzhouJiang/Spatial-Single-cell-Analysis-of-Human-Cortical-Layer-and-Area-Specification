@@ -52,6 +52,20 @@ group_lst <- c("EN-ET-L5|6", "EN-ET-SP|L6b", "EN-IT-L2", "EN-IT-L3", "EN-IT-L4",
 topgene_lst <- list()
 bottomgene_lst <- list()
 
+topgene_lst[["EN-ET-L5|6"]] <- c("NR4A2", "NPR3", "LPL", "RGS6", "KCTD12", "ZFPM2", "ZEB2", "ST18", "TSHZ3", "KLHL1")
+topgene_lst[["EN-ET-SP|L6b"]] <- c("NPR3", "CYP26A1", "ST18", "HCRTR2", "SORCS1", "CDH13", "BACH2", "TSHZ3", "PDE1A", "MLIP")
+topgene_lst[["EN-IT-L2"]] <- c("NEUROD6", "NEFM", "NR4A2", "RORB", "FEZF2", "FOXP1", "TAFA1", "SLITRK5", "NPY", "GLRA2")
+topgene_lst[["EN-IT-L3"]] <- c("FEZF2", "NR4A2", "NEUROD6", "ZEB2", "SATB2", "BACH2", "NIPBL.DT", "TSHZ3", "PEX5L", "NEFM")
+topgene_lst[["EN-IT-L4"]] <- c("NR4A2", "NPY", "GLRA2", "NIPBL.DT", "NEFM", "TAFA1", "LHX2", "B3GALT2", "KIF26B", "SATB2")
+topgene_lst[["EN-IT-L5|6"]] <- c("RSPO3", "ACTN2", "KITLG", "GLRA2", "SEMA3E", "NIPBL.DT", "MYT1L", "STK32B", "BACH2", "GPR85")
+
+bottomgene_lst[["EN-ET-L5|6"]] <- c("VAT1L", "HSPA12A", "NEFM", "GABRB2", "ATP2B4", "MLIP", "PCDH17", "CYP26A1", "SUSD4", "SEMA3E")
+bottomgene_lst[["EN-ET-SP|L6b"]] <- c("CBLN2", "ATP2B4", "VAT1L", "TRPM3", "GABRB2", "RAP1GAP", "CCN2", "NEFM", "HSPA12A", "FOXP2")
+bottomgene_lst[["EN-IT-L2"]] <- c("PENK", "PRSS12", "NEUROD1", "SCG2", "CPNE8", "CUX2", "CDH13", "KCNJ6", "FAM107A", "NPR3")
+topgene_lst[["EN-IT-L3"]] <- c("CUX2", "SCG2", "GABRA5", "CAMK2B", "KCNJ6", "FAM107A", "TMOD1", "SLC17A6", "PENK", "CUX1")
+topgene_lst[["EN-IT-L4"]] <- c("GABRA5", "SPOCK1", "FOXP1", "NPNT", "RASGRF2", "GPRC5B", "KLHL1", "FBXO32", "FAM107A", "FSTL5")
+topgene_lst[["EN-IT-L5|6"]] <- c("GABRA5", "FSTL5", "KLHL1", "VAT1L", "SPOCK1", "MLIP", "AHI1", "ATP2B4", "FBXO32", "RASGRF2")
+
 for (i in 1:length(group_lst)) {
   setwd("result")
   group <- group_lst[i]
@@ -60,31 +74,9 @@ for (i in 1:length(group_lst)) {
   gene_nz <- read.csv(paste0(group, "_nz.csv"), row.names = 1)
   
   setwd("../")
-  gene_incre <- rownames(gene_rank)[1:10]
-  gene_incre <- gsub("-", ".", gene_incre)
-  
-  if (group == "EN-ET-L5|6") {
-    gene_incre <- c(gene_incre[1:9], rownames(gene_rank)[11])
-  } else if (group == "EN-ET-SP|L6b") {
-    gene_incre <- c(gene_incre[1:9], "MLIP")
-  } else if (group == "EN-IT-L3") {
-    gene_incre <- c(gene_incre[1:4], gene_incre[6:10], rownames(gene_rank)[11])
-  } else if (group == "EN-IT-L5/6") {
-    gene_incre <- c(gene_incre[1:9], "TLE4")
-  }
-  
-  gene_decre <- rownames(gene_rank)[300:291]
-  gene_decre <- gsub("-", ".", gene_decre)
-  
-  if (group == "EN-ET-L5|6") {
-    gene_decre <- c(gene_decre[1:8], rownames(gene_rank)[290:289])
-  } else if (group == "EN-IT-L2") {
-    gene_decre <- c(gene_decre[1:8], rownames(gene_rank)[289:288])
-  } else if (group == "EN-IT-L3") {
-    gene_decre <- c(gene_decre[1:6], gene_decre[8:10], "CUX1") # "NRN1
-  }
+  gene_incre <- topgene_lst[[group]]
+  gene_decre <- bottomgene_lst[[group]]
 
-  
   zs_top <- gene_zs[, gene_incre]
   nz_top <- gene_nz[, gene_incre]
   zs_bottom <- gene_zs[, gene_decre]
