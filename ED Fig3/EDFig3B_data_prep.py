@@ -1,4 +1,4 @@
-## Raw data are downloaded from Trevino, A. E. et al. doi:10.1016/j.cell.2021.07.039 (2021).
+## Raw scRNA-seq reference data are downloaded from Trevino, A. E. et al. doi:10.1016/j.cell.2021.07.039 (2021).
 ## This file is to transform the raw data into h5ad format
 
 from anndata import AnnData
