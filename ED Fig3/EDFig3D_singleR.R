@@ -1,4 +1,4 @@
-# SMARTseq data are downloaded from Nowakowski, T. J. et al. doi:10.1126/science.aap8809 (2017).
+## Raw SMARTseq reference data are downloaded from Nowakowski, T. J. et al. doi:10.1126/science.aap8809 (2017).
 
 library(reticulate)
 # use_python("/usr/local/bin/python3.10")
