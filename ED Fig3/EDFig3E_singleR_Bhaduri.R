@@ -44,7 +44,7 @@ ref_data <- SingleCellExperiment(assays = list(counts = matrix), rowData = featu
                                 colData = DataFrame(Type=meta$cell_type, row.names = meta$Cell.Name))  
 ref_data <- logNormCounts(ref_data)
 
-adata_tot <- read_h5ad("merscope_integrated_855.h5ad")
+adata_tot <- read_h5ad("../source_data/merscope_integrated_855.h5ad")
 adata_tot <- adata_tot[adata_tot$obs$H1_annotation %in% c("EN-IT", "EN-ET", "EN-Mig")]
 adata_tot <- AnnData(adata_tot$raw$X, obs = adata_tot$obs, var = adata_tot$var, obsm = list(spatial = adata_tot$obsm$spatial))
 set.seed(1234)
