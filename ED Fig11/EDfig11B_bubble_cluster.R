@@ -12,7 +12,7 @@ library(reshape2)
 library(cowplot)
 
 
-use_python("/usr/local/bin/python3.10")
+# use_python("/usr/local/bin/python3.10")
 align_legend <- function(p, hjust = 0.5) {
   # extract legend
   g <- cowplot::plot_to_gtable(p)
