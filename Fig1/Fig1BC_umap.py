@@ -24,8 +24,7 @@ color_dict = {'RG1':'#FADBD8', 'oRG1':'#F1948A','Astro-late1':'#E74C3C','tRG':'#
               'EC':'#979A9A',
               'Astro-1':'#D6DBDF', 'OPC':'#ABB2B9',
               'IN-SST':'#FCF3CF', 'IN-CGE':'#F7DC6F', 'INP-VZ/GE':'#F1C40F', 'IN-VZ/GE':'#B7950B', 'IN-MGE':'#7D6608'}              
-h2_colors = 
-['#92D050','#99D35B','#A0D666','#ADDB7C','#C8E6A7','#00B0F0','#10B5F1','#D8ADFF','#40C3F4','#7FD6F7','#00B050','#10B55B','#20BA66','#40C37C','#7FD6A7','#FFC000','#FFC820','#FFCF40','#FFD760','#FFDE7F','#209AD2','#FEAAA8','#B870FF','#C8E61B','#FF0000','#CC99FF','#7030A0','#8C57B2','#305496','#4A69A3','#647EB0','#7E93BD','#97A8CA']
+h2_colors = ['#92D050','#99D35B','#A0D666','#ADDB7C','#C8E6A7','#00B0F0','#10B5F1','#D8ADFF','#40C3F4','#7FD6F7','#00B050','#10B55B','#20BA66','#40C37C','#7FD6A7','#FFC000','#FFC820','#FFCF40','#FFD760','#FFDE7F','#209AD2','#FEAAA8','#B870FF','#C8E61B','#FF0000','#CC99FF','#7030A0','#8C57B2','#305496','#4A69A3','#647EB0','#7E93BD','#97A8CA']
 h2_color_dict = dict(zip(color_dict.keys(), h2_colors))
 obs['x'] = merscope_umap[:,0]
 obs['y'] = merscope_umap[:,1]
