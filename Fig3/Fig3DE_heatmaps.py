@@ -16,17 +16,16 @@ gw22 = ['FB123']
 gw34 = ['UMB5900']
 
 
-adata = adata[~((adata.obs['sample'] == 'FB080') & (adata.obs.region=='O1b')) | ((adata.obs['sample'] == 'UMB1117') & (adata.obs.region=='O1'))].copy()
+adata = adata[~(((adata.obs['sample'] == 'FB080') & (adata.obs.region=='O1b')) | ((adata.obs['sample'] == 'UMB1117') & (adata.obs.region=='O1')) | ((adata.obs['sample'] == 'UMB1367') & (adata.obs.region=='O1') & (adata.obs.area=='C-V2')))].copy()
 
-adata = adata[((adata.obs['sample'] != 'FB080') & (adata.obs.region!='O1b')) & ((adata.obs['sample'] != 'UMB1117') & (adata.obs.region!='O1'))].copy()
+adata.obs['area'] = [i.split('-')[1] if isinstance(i, str) and '-' in i else i for i in adata.obs['area']]
 
-adata.obs['layer'][(adata.obs['layer'].isin(['l2', 'l3', 'l4', 'l5', 'l6'])) & (~adata.obs['H1_annotation'].isin(['EN-IT', 'EN-Mig', 'EN-ET']))] = np.nan
 
 def mean_exp(adata, section, area, layers):
   layer_dict = dict(zip(layers, [np.nan]*len(layers)))
   sample1 = section.split('_')[0]
   region = section.split('_')[1]
-  adata2 = adata[(adata.obs['sample']==sample1) & (adata.obs.region==region)].copy()
+  adata2 = adata[(adata.obs['sample']==sample1) & (adata.obs.region==region) & (adata.obs.area==area)].copy()
   for layer in layers:
     adata3 = adata2[adata2.obs.layer==layer].copy()
     if sum(adata2.obs.layer==layer)>0:
@@ -37,7 +36,7 @@ def mean_exp(adata, section, area, layers):
 
 
 def cp_annotation(section, area):
-      obs = pd.read_csv('/Users/kylecoleman/data/walsh/all/clustering2/annotations_completed_cortical_dist/'+section+'/'+image+'_obs_cp.csv', index_col = 0)
+      obs = pd.read_csv(image+'_obs_cp.csv', index_col = 0)
       obs.cp_dist = np.sqrt(obs.cp_dist)
       adata1 = adata[(adata.obs['sample']==sample1) & (adata.obs.region==region)].copy()
       if section.split('_')[0] in gw15:
@@ -79,6 +78,8 @@ dict1 = {
     for (sample, region), areas in adata.obs.groupby(['sample', 'region'])['area']
 }
 
+
+adata.obs['layer'][(adata.obs['layer'].isin(['l2', 'l3', 'l4', 'l5', 'l6'])) & (~adata.obs['H1_annotation'].isin(['EN-IT', 'EN-Mig', 'EN-ET']))] = np.nan
 
 
 order = ['PFC', 'PMC', 'M1', 'S1', 'Par', 'Temp', 'Occi', 'V2', 'V1']
@@ -205,7 +206,7 @@ def make_heatmap(gene):
   axs[2].tick_params(axis='both', which='major', labelsize=15)
   axs[3].tick_params(axis='both', which='major', labelsize=15)
   plt.tight_layout();
-  plt.savefig(gene + '_4.png', dpi=500);
+  plt.savefig(gene + '_10.png', dpi=500);
   plt.clf()
 
 genes = ['CBLN2', 'CPNE8', 'B3GNT2', 'SRM', 'STK32B', 'VSTM2L', 'PENK']
