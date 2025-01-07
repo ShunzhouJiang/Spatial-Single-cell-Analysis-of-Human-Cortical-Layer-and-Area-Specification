@@ -43,6 +43,10 @@ col_map <- c('EN-ET-SP|L6b' = '#9500ff',
              'EN-IT-L3' = '#ffe000',
              'EN-IT-L2' = '#ec2814')
 
+if (!dir.exists("fig4E")) {
+  dir.create(paste0("fig4E"))
+}
+
 # Plot and save figures
 for (gene in gene_lst) {
   p <- ggplot(data = gene_dict[[gene]], aes(x = GW, y = value, group = Cluster, color = Cluster)) +
@@ -56,5 +60,5 @@ for (gene in gene_lst) {
           legend.text = element_text(size = 6),
           legend.background = element_rect(fill = "white", linetype="solid", colour ="black", linewidth = 0.2))
   
-  ggsave(filename = paste0("fig5D_ver2/", gene, ".pdf"), plot = p, width = 5, height = 4, dpi = 400)
+  ggsave(filename = paste0("fig4E/", gene, ".pdf"), plot = p, width = 5, height = 4, dpi = 400)
 }
