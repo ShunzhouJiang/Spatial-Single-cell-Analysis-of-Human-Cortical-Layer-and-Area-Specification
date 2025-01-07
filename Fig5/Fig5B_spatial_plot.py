@@ -9,7 +9,7 @@ adata = sc.read('gw20.h5ad')
 
 def make_plot(sample, region):
     adata1 = adata[(adata.obs['sample']==sample) & (adata.obs.region==region)].copy()
-    types = ['EN-IT-L3-c0', 'EN-IT-L3/4-c3', 'EN-ET-L5/6-c4', 'EN-ET-SP-2-c1', 'EN-IT-L3-c3', 'EN-IT-L3/4-c0', 'EN-ET-L5/6-c3', 'EN-ET-SP-2-c3']
+    types = ['EN-IT-L3-c1', 'EN-IT-L3/4-c4', 'EN-ET-L5/6-c5', 'EN-ET-SP-2-c2', 'EN-IT-L3-c4', 'EN-IT-L3/4-c1', 'EN-ET-L5/6-c4', 'EN-ET-SP-2-c4']
     colors = ['#FF97EE', '#FF00FF', '#BC00BC', '#A800A8', '#ACFC64', '#00FF00', '#00C800', '#007E00']
     color_dict = dict(zip(types, colors))
     unique_annotations = adata.obs['H3_annotation'].dropna().unique()
