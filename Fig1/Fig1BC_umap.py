@@ -32,11 +32,11 @@ obs['x'] = merscope_umap[:,0]
 obs['y'] = merscope_umap[:,1]
 plt.figure(figsize = (10,10)); seaborn.scatterplot(data = obs, x = 'x', y = 'y', hue = 'H2_annotation', palette = h2_color_dict, s=0.5); plt.axis('off'); handles, labels = plt.gca().get_legend_handles_labels(); order = 
 [labels.index(i) for i in color_dict.keys()]; plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc = 'center', fontsize=3, ncol = 3, bbox_to_anchor=(0.8,0.8), markerscale=0.5); 
-plt.savefig('umap_1000000_h2.png', dpi=500)
+plt.savefig('umap_1000000_h2.png', dpi=500); plt.clf()
 
 h1_colors = ['#92D050','#00B0F0','#00B050','#FFC000','#FF0000','#CC99FF','#7030A0','#305496']
 h1_types = ['RG', 'EN-ET', 'IPC', 'EN-Mig', 'EN-IT', 'EC', 'Glia', 'IN']
 h1_dict = dict(zip(h1_types, h1_colors))
 plt.figure(figsize = (10,10)); seaborn.scatterplot(data = obs, x = 'x', y = 'y', hue = 'H1_annotation', palette = h1_dict, s=0.5); plt.axis('off'); handles, labels = plt.gca().get_legend_handles_labels(); order = [labels.index(i) 
-for i in h1_dict.keys()]; plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc = 'center', fontsize=3, ncol = 1, bbox_to_anchor=(0.8,0.8), markerscale=0.5); plt.savefig('umap_1000000_h1.png', dpi=500)
+for i in h1_dict.keys()]; plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc = 'center', fontsize=3, ncol = 1, bbox_to_anchor=(0.8,0.8), markerscale=0.5); plt.savefig('umap_1000000_h1.png', dpi=500); plt.clf()
 
