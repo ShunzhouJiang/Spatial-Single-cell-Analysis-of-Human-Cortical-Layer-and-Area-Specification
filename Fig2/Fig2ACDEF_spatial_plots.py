@@ -14,7 +14,10 @@ gw34 = ['UMB5900']
 
 
 def make_plot(sample, region, fig):
+<<<<<<< HEAD
     os.makedirs(sample+'_'+region, exist_ok=True)
+=======
+>>>>>>> 89902e0c8a64e6f87e8e0335b6700c05721fa69a
     adata1 = adata[(adata.obs['sample']==sample) & (adata.obs.region==region)].copy()
     if fig=='layer_def':
       ncol=1

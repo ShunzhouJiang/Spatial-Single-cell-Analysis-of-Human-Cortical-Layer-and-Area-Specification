@@ -44,8 +44,13 @@ def make_plot(sample, region, area):
     l4_5 = (np.quantile(obs_en[obs_en.H3_annotation==layer_types[2]].cortical_depth, 0.25)+np.quantile(obs_en[obs_en.H3_annotation==layer_types[3]].cortical_depth, 0.75))/2
     l5_6 = (np.quantile(obs_en[obs_en.H3_annotation==layer_types[3]].cortical_depth, 0.25)+np.quantile(obs_en[obs_en.H3_annotation==layer_types[4]].cortical_depth, 0.75))/2
     l = [l2_3,l3_4,l4_5,l5_6]
+<<<<<<< HEAD
     obs_in.H3_annotation = obs_in.H3_annotation.astype('category').cat.set_categories(order)
     if ((len(type_rm)>0) & (len(type_rm)<len(obs_in.H3_annotation.unique()))):
+=======
+  obs_in.H3_annotation = obs_in.H3_annotation.astype('category').cat.set_categories(order)
+  if ((len(type_rm)>0) & (len(type_rm)<len(obs_in.H3_annotation.unique()))):
+>>>>>>> 89902e0c8a64e6f87e8e0335b6700c05721fa69a
         obs_in_notrm = obs_in[~obs_in.H3_annotation.isin(type_rm)]
         obs_in_rm = obs_in[obs_in.H3_annotation.isin(type_rm)]
         #order = list(obs.groupby('H3_annotation').aggregate('median').sort_values(by='cp_dist').index)
@@ -58,7 +63,11 @@ def make_plot(sample, region, area):
         plt.tight_layout();
         plt.savefig(sample + '-' + region + '-' + area + 'in_violin.png', dpi=200, bbox_to_inches = 'tight', pad_inches=0)
 
+<<<<<<< HEAD
       elif ((len(type_rm)>0) & (len(type_rm)==len(obs_in.H3_annotation.unique()))):
+=======
+    elif ((len(type_rm)>0) & (len(type_rm)==len(obs_in.H3_annotation.unique()))):
+>>>>>>> 89902e0c8a64e6f87e8e0335b6700c05721fa69a
         #order = list(obs.groupby('H3_annotation').aggregate('median').sort_values(by='cp_dist').index)
         plt.figure(figsize=(35,7));
         #plot = sns.violinplot(x='H3_annotation', y='cortical_depth', hue='H3_annotation', data=obs2, order=order, palette='rainbow', density_norm='width', inner = None, dodge=False, cut=0);
@@ -69,7 +78,11 @@ def make_plot(sample, region, area):
         plt.tight_layout();
         plt.savefig(sample + '-' + region + '-' + area + 'in_violin.png', dpi=200, bbox_to_inches = 'tight', pad_inches=0)
         
+<<<<<<< HEAD
       else:
+=======
+    else:
+>>>>>>> 89902e0c8a64e6f87e8e0335b6700c05721fa69a
         #order = list(obs.groupby('H3_annotation').aggregate('median').sort_values(by='cp_dist').index)
         plt.figure(figsize=(35,7));
         plot = sns.violinplot(x='H3_annotation', y='cortical_depth', hue='H3_annotation', data=obs_in, order=order, palette='rainbow', density_norm='width', inner = None, dodge=False, cut=0);
