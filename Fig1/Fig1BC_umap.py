@@ -15,6 +15,7 @@ import seaborn
 #data1 = data[samples,:]
 #embedder = umap.UMAP(init = 'random', random_state=100).fit(data1)
 #merscope_umap = embedder.embedding_
+obs = pd.read_csv('umap_obs.csv', index_col = 0)
 
 color_dict = {'RG1':'#FADBD8', 'oRG1':'#F1948A','Astro-late1':'#E74C3C','tRG':'#B03A2E','vRG-late':'#78281F',
               "EN-ET-SP-early":'#E8DAEF','EN-ET-SP-P':'#BB8FCE','EN-ET-L5/6':'#8E44AD','EN-ET-L6-early':'#6C3483','EN-ET-SP':'#4A235A',
@@ -28,7 +29,6 @@ h2_colors = ['#92D050','#99D35B','#A0D666','#ADDB7C','#C8E6A7','#00B0F0','#10B5F
 h2_color_dict = dict(zip(color_dict.keys(), h2_colors))
 #obs['x'] = merscope_umap[:,0]
 #obs['y'] = merscope_umap[:,1]
-obs = pd.read_csv('umap_obs.csv', index_col = 0)
 
 plt.figure(figsize = (10,10)); seaborn.scatterplot(data = obs, x = 'umap_x', y = 'umap_y', hue = 'H2_annotation', palette = h2_color_dict, s=0.5); plt.axis('off'); handles, labels = plt.gca().get_legend_handles_labels();
 order = [labels.index(i) for i in color_dict.keys()]; plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc = 'center', fontsize=3, ncol = 3, bbox_to_anchor=(0.8,0.8), markerscale=0.5); 
