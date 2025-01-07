@@ -36,6 +36,7 @@ def preprocess(adata_15, adata_20, adata_34, adata_adult, itet = "EN-IT"):
 
     adata_adult = adata_adult[adata_adult.obs['H1_annotation'] == itet].copy()
     sc.pp.normalize_total(adata_adult, target_sum=1e4)
+    sc.pp.log1p(adata_adult)
     return adata_15, adata_20, adata_34, adata_adult
 
 
