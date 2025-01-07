@@ -18,8 +18,8 @@ def get_data_it(gw_num):
     if gw_num == 20:
         adata_20 = read_h5ad("data_region/fb080_o1c_clusters.h5ad")
         adata_20 = adata_20[adata_20.obs['H1_annotation'] == 'EN-IT'].copy()
-        adata_20_v1 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-IT-L3-c0', 'EN-IT-L3/4-c3'])].copy()
-        adata_20_v2 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-IT-L3-c3', 'EN-IT-L3/4-c0'])].copy()
+        adata_20_v1 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-IT-L3-c1', 'EN-IT-L3/4-c4'])].copy()
+        adata_20_v2 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-IT-L3-c4', 'EN-IT-L3/4-c1'])].copy()
 
         adata_20_v1.obs['v1v2'] = 'v1'
         adata_20_v2.obs['v1v2'] = 'v2'
@@ -63,8 +63,8 @@ def get_data_et(gw_num):
         gw_num = gw_num
     if gw_num == 20:
         adata_20 = read_h5ad("data_region/fb080_o1c_clusters.h5ad")
-        adata_20_v1 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-ET-L5/6-c4', 'EN-ET-SP-2-c1'])].copy()
-        adata_20_v2 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-ET-L5/6-c3', 'EN-ET-SP-2-c3'])].copy()
+        adata_20_v1 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-ET-L5/6-c5', 'EN-ET-SP-2-c2'])].copy()
+        adata_20_v2 = adata_20[adata_20.obs['H3_annotation'].isin(['EN-ET-L5/6-c4', 'EN-ET-SP-2-c4'])].copy()
         adata_20_v1.obs['v1v2'] = 'v1'
         adata_20_v2.obs['v1v2'] = 'v2'
         adata_compare = concat([adata_20_v1, adata_20_v2], axis = 0)
