@@ -13,21 +13,10 @@ library(patchwork)
 library(dplyr)
 set.seed(1234)
 
-#sctransform normalizes the data, detects high-variance features, 
-#and stores the data in the SCT assay.
-A1_brain <- readRDS('/Users/monicam/RWorkspace/Seurat_analysis/VISIUM/A1_brain.rds')
-A1_brain <- SCTransform(A1_brain, assay = "Spatial", verbose = FALSE)
-A1_brain <- RunPCA(A1_brain, assay = "SCT", verbose = FALSE)
-A1_brain <- FindNeighbors(A1_brain, reduction = "pca", dims = 1:30)
-#Increased to 1.5 to get more clusters 
-A1_brain <- FindClusters(A1_brain, resolution = 1.5)
-A1_brain <- RunUMAP(A1_brain, reduction = "pca", dims = 1:30)
-plot <- VlnPlot(A1_brain, features = "nCount_Spatial", pt.size = 0.1) + NoLegend()
+#Read RDS from Zenodo Upload 
+Visium_A1_brain_011124 <- readRDS("Visium_A1_brain_011124.rds")
 
-# QC 1: Remove cluster 14 looking at downstream violin counts - has 0 cells 
-A1brain_no14 <- subset(x = A1_brain, idents = 14, invert = TRUE)
-
-A1_SpatialHeatMap <- SpatialFeaturePlot(A1brain_no14, 
+A1_SpatialHeatMap <- SpatialFeaturePlot(Visium_A1_brain_011124, 
                                         max.cutoff = "1e+05",
                                         features = "nCount_Spatial",
                                         image.alpha = 0,
@@ -43,7 +32,7 @@ A1_slide <- p1 + p2
 #3.
 #SpatilDimPlot
 A1_spatialdimplot <- SpatialDimPlot(
-  A1brain_no14, 
+  Visium_A1_brain_011124, 
   label = TRUE, 
   label.size = 6, 
   image.alpha = 0,
@@ -56,7 +45,7 @@ SpatialDimPlot(A1_brain, cells.highlight = CellsByIdentities(A1_brain),
                ncol = 5)
 
 #Annotation : 
-A1brain_no14_annotated <- RenameIdents(A1brain_no14, `0` = "iSVZ", `1` = "IZ", 
+Visium_A1_brain_011124_annotated <- RenameIdents(Visium_A1_brain_011124, `0` = "iSVZ", `1` = "IZ", 
                                        `2` = "oSVZ-1", `3` = "VZ", `4` = "oSVZ-2",
                                        `5` = "SP-V1", `6` = "oSVZ-L1", 
                                        `7` = "oSVZ-L2", `8` = "L4-V2", 
@@ -66,26 +55,26 @@ A1brain_no14_annotated <- RenameIdents(A1brain_no14, `0` = "iSVZ", `1` = "IZ",
                                        `16` = "L2-V1", `17` = "L3-V1", 
                                        `18` = "iSVZ-L")
 
-fig_5_i <- DimPlot(A1brain_no14_annotated, label = TRUE)
+fig_5_i <- DimPlot(Visium_A1_brain_011124_annotated, label = TRUE)
 
 #MARKER GENE ANALYSIS 
-table(A1brain_no14@active.ident)
-A1brain_no14_annotated.markers <- FindAllMarkers(A1brain_no14_annotated, only.pos = TRUE)
+table(Visium_A1_brain_011124@active.ident)
+Visium_A1_brain_011124_annotated.markers <- FindAllMarkers(Visium_A1_brain_011124_annotated, only.pos = TRUE)
 
 #Filtering for markers grouped by clusters with an average log2 fold change greater than 1.
-A1brain_no14_annotated.markers %>%
+Visium_A1_brain_011124_annotated.markers %>%
   group_by(cluster) %>%
   dplyr::filter(avg_log2FC > 1) %>%
   slice_head(n = 10) %>%
   ungroup() -> top10
-DoHeatmap(A1brain_no14_annotated, features = top10$gene) + NoLegend()
+DoHeatmap(Visium_A1_brain_011124_annotated, features = top10$gene) + NoLegend()
 
-table(A1brain_no14_annotated@active.ident, A1brain_no14_annotated@meta.data)
+table(Visium_A1_brain_011124_annotated@active.ident, Visium_A1_brain_011124_annotated@meta.data)
 # Store cluster identities in object@meta.data$my.clusters
-A1brain_no14_annotated[["my.clusters"]] <- Idents(A1brain_no14_annotated)
+Visium_A1_brain_011124_annotated[["my.clusters"]] <- Idents(Visium_A1_brain_011124_annotated)
 
 #CALL the function to flip the image
-bb5=rotateSeuratImage(A1brain_no14_annotated,rotation = "180")
+bb5=rotateSeuratImage(Visium_A1_brain_011124_annotated,rotation = "180")
 
 #Plot Spatial 
 fig_5_h <- SpatialFeaturePlot(object = bb5, 
