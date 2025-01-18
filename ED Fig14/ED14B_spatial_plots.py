@@ -5,7 +5,7 @@ from multiprocessing import Pool
 from matplotlib_scalebar.scalebar import ScaleBar
 from itertools import repeat
 
-
+#gw22_umb1932.h5ad has a typo, experiment is from GW21
 adata = sc.read('gw22_umb1932.h5ad')
 
 def make_plot_combined():
