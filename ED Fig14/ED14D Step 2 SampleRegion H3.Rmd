@@ -1,0 +1,32 @@
+---
+title: "CorticalArea"
+output: html_document
+date: "2023-12-25"
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(readxl)
+plot_data <- read.csv("H3area_histogram.csv")
+```
+
+```{r}
+stacked_barplot <- ggplot(plot_data, aes(fill=H3_annotation, y=percent, x=area)) +
+  geom_bar(position="fill", stat="identity", width = 0.3) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) +
+  xlab("Area") 
+print(stacked_barplot)
+```
+
+```{r}
+# Saving the plot
+ggsave("UMB1759_EN-Mig_AreaPropH3.pdf", stacked_barplot, width = 8, height = 5, units = "in")
+```
+
