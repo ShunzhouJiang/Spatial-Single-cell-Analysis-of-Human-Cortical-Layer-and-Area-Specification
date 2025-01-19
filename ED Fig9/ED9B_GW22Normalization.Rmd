@@ -1,0 +1,76 @@
+---
+title: "XuyuMerscopeAllClusters"
+output: html_document
+date: "2023-10-30"
+---
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(RColorBrewer)
+gw22block <- read.csv("gw22block.csv")
+```
+
+```{r}
+# Compute the total ENs for each H3 cluster and experiment
+# For each h3 cluster, normalize the RS pair in that cluster
+gw22_r_H1c <- gw22block %>%
+  group_by(sample, region, H1_annotation) %>%
+  summarise(H1count = n())
+write.csv(gw22_r_H1c, "gw22_region_H1cluster.csv", row.names = FALSE)
+
+gw22_r_H3c <- gw22block %>%
+  group_by(sample, region, H1_annotation, H3_annotation) %>%
+  summarise(H3count = n())
+write.csv(gw22_r_H3c, "gw22_region_H3cluster.csv", row.names = FALSE)
+
+# Merging r_H1c and r_H3c data frames
+gw22_normH1 <- merge(gw22_r_H1c, gw22_r_H3c, by = c("sample", "region", "H1_annotation"))
+
+# Normalize to H1
+gw22_normH1$`normH1` <- gw22_normH1$H3count / gw22_normH1$H1count
+gw22_normH1$`normH1(%)` <- gw22_normH1$H3count * 100 / gw22_normH1$H1count
+
+gw22_H3c <- gw22_normH1 %>%
+  group_by(H3_annotation) %>%
+  summarise(max_normH1_val = max(`normH1(%)`))
+write.csv(gw22_H3c, "gw20_max_normH1val_per_H3.csv", row.names = FALSE)
+
+# Merging r and normH1 data frames
+gw22_norm <- merge(gw22_H3c, gw22_normH1, by = "H3_annotation")
+
+# Normalize to columns
+gw22_norm$`norm` <- gw22_norm$`normH1(%)` * 10 / gw22_norm$max_normH1_val
+gw22_norm$sample_region <- paste(gw22_norm$sample, gw22_norm$region, sep = "-")
+
+write.csv(gw22_norm, "gw22_normalized.csv", row.names = FALSE)
+```
+
+```{r}
+# Set the order of the 'region' variable
+gw22_norm$sample_region <- factor(gw22_norm$sample_region, levels = c("FB123-O2", "FB123-O1", "FB123-P1", "FB123-F3", "FB123-F2", "FB123-F1"))
+
+gw22_norm$H3_annotation <- factor(gw22_norm$H3_annotation, levels = c("Astro-early", "Astro-late1", "Astro-late2", "oRG-1", "oRG-2", "oRG-3", "oRG-4", "oRG-5", "oRG-6", "oRG-7", "oRG-8", "oRG-9", "tRG-1", "tRG-2", "tRG-early", "vRG-early", "vRG-early1", "vRG-early2", "vRG-late1", "vRG-late2", "vRG-late3", "IPC-iSVZ", "IPC-oSVZ", "IPC-SVZ-1", "IPC-SVZ-2", "IPC-VZ/SVZ", "IN-CGE1", "IN-CGE2", "IN-CGE3", "IN-CGE4",  "IN-CGE5", "IN-GE1", "IN-GE2", "IN-MGE1", "IN-MGE2", "IN-MGE3", "IN-MGE4", "IN-MGE5", "IN-SST-NPY", "IN-SST1", "IN-SST2", "IN-SST3", "IN-SST4", "IN-VIP-late", "IN-VZ/LGE1", "IN-VZ/LGE2", "INP-LGE1", "INP-LGE2", "INP-VZ", "INP-VZ/GE1", "INP-VZ/GE2"))
+
+# Creating the heatmap
+heatmap <- ggplot(gw22_norm, aes(x = H3_annotation, y = sample_region, fill = norm)) +
+  geom_tile(width = 1, height = 1) +
+  scale_fill_gradientn(colors = brewer.pal(9, "RdPu")) +
+  labs(title = "GW22 Cell fraction distribution of H3 clusters",
+       x = "H3 clusters",
+       fill = "Fraction of cells (normalized)") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) 
+
+print(heatmap)
+```
+
+```{r}
+# Saving the plot
+ggsave("H3ClustersGW22.pdf", heatmap, width = 15, height = 3.39, units = "in")
+```
+
