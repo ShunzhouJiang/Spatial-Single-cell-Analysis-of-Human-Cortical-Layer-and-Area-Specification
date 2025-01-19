@@ -1,0 +1,59 @@
+---
+title: "CorticalArea"
+output: html_document
+date: "2023-12-25"
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(readxl)
+plot_data_15 <- read.csv("H1sr_histogram_15.csv")
+plot_data_20 <- read.csv("H1sr_histogram_20.csv")
+meta_info <- read_excel("meta info.xlsx")
+```
+
+```{r}
+colnames(plot_data_15)[2] <- "New Experiment Name"
+plot_data_15$`New Experiment Name` <- factor(plot_data_15$`New Experiment Name`, levels = meta_info$`New Experiment Name`)
+plot_data_15$H1_annotation <- factor(plot_data_15$H1_annotation, levels = c('RG', 'EN-ET', 'IPC', 'EN-Mig', 'EN-IT', 'EC', 'Glia', 'IN'))
+
+colnames(plot_data_20)[2] <- "New Experiment Name"
+plot_data_20$`New Experiment Name` <- factor(plot_data_20$`New Experiment Name`, levels = meta_info$`New Experiment Name`)
+plot_data_20$H1_annotation <- factor(plot_data_20$H1_annotation, levels = c('RG', 'EN-ET', 'IPC', 'EN-Mig', 'EN-IT', 'EC', 'Glia', 'IN'))
+```
+
+```{r}
+stacked_barplot_15 <- ggplot(plot_data_15, aes(fill=H1_annotation, y=percent, x=`New Experiment Name`)) +
+  geom_bar(position="fill", stat="identity") +
+  scale_fill_manual(values=c('#92D050','#00B0F0','#00B050','#FFC000','#FF0000','#CC99FF','#7030A0','#305496')) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) +
+  xlab("Experiment") 
+print(stacked_barplot_15)
+```
+
+```{r}
+# Saving the plot
+ggsave("Sample Region Prop H1_15.pdf", stacked_barplot_15, width = 8, height = 6, units = "in")
+```
+
+```{r}
+stacked_barplot_20 <- ggplot(plot_data_20, aes(fill=H1_annotation, y=percent, x=`New Experiment Name`)) +
+  geom_bar(position="fill", stat="identity") +
+  scale_fill_manual(values=c('#92D050','#00B0F0','#00B050','#FFC000','#FF0000','#CC99FF','#7030A0','#305496')) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5),
+        axis.title.y = element_blank(),
+        plot.margin = unit(c(1, 1, 1, 5), "cm"),
+        plot.title.position = "plot",
+        plot.title = element_text(hjust = 0.4),
+        legend.position = "right"
+        ) +
+  xlab("Experiment") 
+print(stacked_barplot_20)
+```
