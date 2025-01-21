@@ -209,7 +209,8 @@ def make_heatmap(gene):
   plt.savefig(gene + '_10.png', dpi=500);
   plt.clf()
 
-genes = ['CBLN2', 'CPNE8', 'B3GNT2', 'SRM', 'STK32B', 'VSTM2L', 'PENK']
+#genes = ['CBLN2', 'CPNE8', 'B3GNT2', 'SRM', 'STK32B', 'VSTM2L', 'PENK']
+genes = adata.var.index
 
 def main():
   with Pool(len(genes)) as pool:
