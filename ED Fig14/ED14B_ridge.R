@@ -2,8 +2,7 @@ library(ggplot2)
 library(reticulate)
 anndata = import("anndata")
 
-#gw22_umb1932.h5ad has a typo, experiment is from GW21
-adata = anndata$read_h5ad("gw22_umb1932.h5ad")
+adata = anndata$read_h5ad("gw21_umb1932.h5ad")
 obs = adata$obs
 obs = obs[!is.na(obs$v1_v2_dist), ]
 
