@@ -1,4 +1,4 @@
-# Results based on "fig4E_EDfig11c_gene_updown.ipynb"
+# Results based on "EDfig12C_step1_gene_updown.ipynb"
 
 library(dplyr)
 library(ggplot2)
